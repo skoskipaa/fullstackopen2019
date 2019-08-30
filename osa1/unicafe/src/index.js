@@ -9,6 +9,14 @@ const Header = (props) => {
     )
 }
 
+const Statistic = ({ text, value }) => {
+    return (
+        <div>
+            <p>{text}: {value} </p>
+        </div>
+    )
+}
+
 const Statistics = ({ good, neutral, bad }) => {
     const total = () => good + neutral + bad
 
@@ -25,12 +33,12 @@ const Statistics = ({ good, neutral, bad }) => {
 
     return (
         <div>
-            <p>Good: {good}</p>
-            <p>Neutral: {neutral}</p>
-            <p>Bad: {bad}</p>
-            <p>All: {total()}</p>
-            <p>Average: {average()}</p>
-            <p>Positive: {positive()} %</p>
+            <Statistic text='Good' value={good} />
+            <Statistic text='Neutral' value={neutral} />
+            <Statistic text='Bad' value={bad} />
+            <Statistic text='All' value={total()} />
+            <Statistic text='Average' value={average()} />
+            <Statistic text='Positive' value={positive() + ' %'} />
         </div>
     )
 }
