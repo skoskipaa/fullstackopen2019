@@ -19,12 +19,24 @@ const App = (props) => {
 
     }
 
+    const maxPoints = () => {
+
+        var max = Math.max(...values)
+        var ind = values.indexOf(max)
+        
+        return ind
+    }
+
     return (
         <div>
+            <h2>Anecdote of the day:</h2>
             <p>{props.anecdotes[selected]}</p>
-            <p>{values[selected]} votes!</p>
+            <p>{values[selected]} votes</p>
             <Button onClick={() => updatePoints(selected)} text='Vote!' />
             <Button onClick={() => raffle(Math.floor(Math.random() * anecdotes.length))} text='Random anecdote!' />
+            <h2>Most voted anecdote:</h2>
+            <p>{props.anecdotes[maxPoints()]}</p>
+            <p>{Math.max(...values)} votes</p>
         </div>
     )
 }
