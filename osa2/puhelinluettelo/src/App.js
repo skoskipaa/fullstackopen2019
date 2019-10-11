@@ -1,51 +1,55 @@
 import React, { useState } from 'react'
+import Contacts from './components/Contacts'
+import FilterForm from './components/FilterForm'
+import ContactForm from './components/ContactForm'
 
 const App = (props) => {
     const [ persons, setPersons] = useState(props.persons)
     const [ newName, setNewName ] = useState('')
+    const [ newNumber, setNewNumber] = useState('')
+    const [filterByName, setFilter ] = useState('')
 
+    const handleFilter = (event) => {
+        setFilter(event.target.value)
+    }
+    
     const handleNameChange = (event) => {
-        console.log(event.target.value)
         setNewName(event.target.value)
     }
 
-    const addName = (event) => {
-        event.preventDefault()
-        
-        const nameObject = newName
-
-        persons.includes(nameObject)
-        ? window.alert(`${nameObject} is already in the phonebook!`)
-        
-        : setPersons(persons.concat(nameObject))
-        setNewName('')
-        
+    const handleNumberChange = (event) => {
+        setNewNumber(event.target.value)
     }
 
-    const rows = () => persons.map(person =>
-        <li key={person}>{person}</li>
-        )
-  
+    const addPerson = (event) => {
+        event.preventDefault()
+        
+        const personObject = {
+            name: newName,
+            phone: newNumber
+        }
+
+        const names = persons.map(p =>
+          p.name.toLowerCase())
+          names.includes(personObject.name.toLowerCase())
+          ? window.alert(`${personObject.name} is already in the phonebook!`)
+          : setPersons(persons.concat(personObject))
+          setNewName('')
+          setNewNumber('')
+    }
+
     return (
       <div>
-        <h2>Phonebook</h2>
-        <form onSubmit={addName}>
-          <div>
-            name: <input 
-                    value={newName}
-                    onChange={handleNameChange}/>    
-          </div>
-          <div>
-            <button type="submit">add</button>
-          </div>
-        </form>
+        <h1>Phonebook</h1>
+        <h2>Filter contacts by name</h2>
+        <FilterForm onChange={handleFilter} value={filterByName} />
+        <h2>Add a new contact</h2>
+        <ContactForm addPerson={addPerson} newName={newName} handleNameChange={handleNameChange}
+                     newNumber={newNumber} handleNumberChange={handleNumberChange} />
         <h2>Numbers</h2>
-        <ul>
-            {rows()}
-        </ul>
+        <Contacts filterByName={filterByName} persons={persons}/>
       </div>
     )
-  
   }
   
   export default App
