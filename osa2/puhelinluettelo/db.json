@@ -1,0 +1,20 @@
+{
+    "persons": [
+        {
+            "name": "Arto Hellas",
+            "phone": "040-555 111 1234"
+        },
+        {
+            "name": "Ada Lovelace",
+            "phone": "050-131 3131"
+        },
+        {
+            "name": "Dan Abramov",
+            "phone": "041-543 6543"
+        },
+        {
+            "name": "Mary Poppendieck",
+            "phone": "999-123 4567"
+        }
+    ]
+}

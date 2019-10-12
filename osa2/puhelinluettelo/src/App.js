@@ -1,13 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import Contacts from './components/Contacts'
 import FilterForm from './components/FilterForm'
 import ContactForm from './components/ContactForm'
 
 const App = (props) => {
-    const [ persons, setPersons] = useState(props.persons)
+    const [ persons, setPersons] = useState([])
     const [ newName, setNewName ] = useState('')
     const [ newNumber, setNewNumber] = useState('')
     const [filterByName, setFilter ] = useState('')
+
+    useEffect(() => {
+      axios
+          .get('http://localhost:3001/persons')
+          .then(Response => {
+            setPersons(Response.data)
+          })
+    }, [])
 
     const handleFilter = (event) => {
         setFilter(event.target.value)
