@@ -1,21 +1,22 @@
 import React from 'react'
 import Person from './Person'
 
-const Contacts = ({filterByName, persons}) => {
+const Contacts = ({filterByName, persons, deleteContact }) => {
     return (
         <ul>
-          {rows({filterByName, persons})}
+          {rows({filterByName, persons, deleteContact })}
         </ul>
       )
     }
     
-    const rows = ({filterByName, persons}) => persons.filter(person =>
+    const rows = ({filterByName, persons, deleteContact }) => persons.filter(person =>
           {
             return person.name.toLowerCase().includes(filterByName.toLowerCase())
           }).map(person =>
             <Person 
-               key={person.name}
+               key={person.id}
                person={person}
+               deleteContact={() => deleteContact(person.id)}
             />
             )
 

@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import Contacts from './components/Contacts'
 import FilterForm from './components/FilterForm'
 import ContactForm from './components/ContactForm'
+import personService from './services/persons'
 
-const App = (props) => {
+const App = () => {
     const [ persons, setPersons] = useState([])
     const [ newName, setNewName ] = useState('')
     const [ newNumber, setNewNumber] = useState('')
     const [filterByName, setFilter ] = useState('')
 
     useEffect(() => {
-      axios
-          .get('http://localhost:3001/persons')
-          .then(Response => {
-            setPersons(Response.data)
+      personService
+          .getAll()
+          .then(initialPersons => {
+            setPersons(initialPersons)
           })
     }, [])
 
@@ -42,9 +42,25 @@ const App = (props) => {
           p.name.toLowerCase())
           names.includes(personObject.name.toLowerCase())
           ? window.alert(`${personObject.name} is already in the phonebook!`)
-          : setPersons(persons.concat(personObject))
+          : personService
+            .create(personObject)
+            .then(returnedNote => {
+            setPersons(persons.concat(returnedNote))
+          })
           setNewName('')
           setNewNumber('')
+
+    }
+
+    const deleteContact = id => {
+      const pers = persons.find(p => p.id === id)
+      if (window.confirm(`Delete ${pers.name} ?`)) {
+      console.log(`deleting contact with id ${id}`)
+      personService
+        .removeContact(id)
+        .then(response =>
+          setPersons(persons.filter(person => person.id !== id)))
+        }
     }
 
     return (
@@ -56,7 +72,7 @@ const App = (props) => {
         <ContactForm addPerson={addPerson} newName={newName} handleNameChange={handleNameChange}
                      newNumber={newNumber} handleNumberChange={handleNumberChange} />
         <h2>Numbers</h2>
-        <Contacts filterByName={filterByName} persons={persons}/>
+        <Contacts filterByName={filterByName} persons={persons} deleteContact={deleteContact}/>
       </div>
     )
   }
