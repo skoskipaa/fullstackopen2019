@@ -40,17 +40,34 @@ const App = () => {
 
         const names = persons.map(p =>
           p.name.toLowerCase())
-          names.includes(personObject.name.toLowerCase())
-          ? window.alert(`${personObject.name} is already in the phonebook!`)
-          : personService
-            .create(personObject)
-            .then(returnedNote => {
-            setPersons(persons.concat(returnedNote))
-          })
-          setNewName('')
-          setNewNumber('')
 
-    }
+        if (names.includes(personObject.name.toLowerCase())) {
+          const pers = persons.find(p => p.name.toLowerCase() === personObject.name.toLowerCase())
+          const persId = pers.id
+          const changedPers = { ...pers, phone: personObject.phone }
+
+          if (window.confirm(`${pers.name} is already in the phonebook! Replace number?`)) {
+            personService
+              .update(persId, changedPers)
+              .then(returnedPers => {
+                setPersons(persons.map(p => p.id !== persId ? p : returnedPers))
+              })
+              .catch(error => console.log('Pieleen män'))
+          }
+
+
+        } else {
+            personService
+              .create(personObject)
+              .then(returnedPers =>
+                setPersons(persons.concat(returnedPers)))
+        }
+        setNewName('')
+        setNewNumber('')
+
+
+      }
+
 
     const deleteContact = id => {
       const pers = persons.find(p => p.id === id)
@@ -58,8 +75,7 @@ const App = () => {
       console.log(`deleting contact with id ${id}`)
       personService
         .removeContact(id)
-        .then(response =>
-          setPersons(persons.filter(person => person.id !== id)))
+        .then(setPersons(persons.filter(person => person.id !== id)))
         }
     }
 
