@@ -36,7 +36,7 @@ const App = () => {
         
         const personObject = {
             name: newName,
-            phone: newNumber
+            number: newNumber
         }
 
         const names = persons.map(p =>
@@ -45,7 +45,7 @@ const App = () => {
         if (names.includes(personObject.name.toLowerCase())) {
           const pers = persons.find(p => p.name.toLowerCase() === personObject.name.toLowerCase())
           const persId = pers.id
-          const changedPers = { ...pers, phone: personObject.phone }
+          const changedPers = { ...pers, number: personObject.phone }
 
           if (window.confirm(`${pers.name} is already in the phonebook! Replace number?`)) {
             personService

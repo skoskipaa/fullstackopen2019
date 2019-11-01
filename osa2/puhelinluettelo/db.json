@@ -2,12 +2,12 @@
   "persons": [
     {
       "name": "John Doe",
-      "phone": "987654",
+      "number": "987654",
       "id": 1
     },
     {
       "name": "Jane Doe",
-      "phone": "765432",
+      "number": "765432",
       "id": 2
     }
   ]
