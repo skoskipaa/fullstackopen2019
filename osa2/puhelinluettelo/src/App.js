@@ -9,7 +9,7 @@ const App = () => {
     const [ newName, setNewName ] = useState('')
     const [ newNumber, setNewNumber] = useState('')
     const [ filterByName, setFilter ] = useState('')
-    const [ message, SetMessage ] = useState(null)
+    const [ message, setMessage ] = useState(null)
 
     useEffect(() => {
       personService
@@ -52,9 +52,9 @@ const App = () => {
               .update(persId, changedPers)
               .then(returnedPers => {
                 setPersons(persons.map(p => p.id !== persId ? p : returnedPers))
-                SetMessage(`Number changed for ${pers.name}`)
+                setMessage(`Number changed for ${pers.name}`)
                 setTimeout(() => {
-                  SetMessage(null)
+                  setMessage(null)
                 }, 5000);
               })
               .catch(error => console.log('Pieleen män'))
@@ -66,9 +66,15 @@ const App = () => {
               .create(personObject)
               .then(returnedPers => {
                 setPersons(persons.concat(returnedPers))
-                SetMessage(`${returnedPers.name} was added to the phonebook.`)
+                setMessage(`${returnedPers.name} was added to the phonebook.`)
                 setTimeout(() => {
-                  SetMessage(null)
+                  setMessage(null)
+                }, 5000)
+              })
+              .catch(error => {
+                setMessage(`Fail: ${error.response.data.error.toString()}`)
+                setTimeout(() => {
+                  setMessage(null)
                 }, 5000)
               })
         }
@@ -84,14 +90,14 @@ const App = () => {
       personService
         .removeContact(id)
         .then(setPersons(persons.filter(person => person.id !== id)))
-        .then(SetMessage(`${pers.name} have been removed.`))
+        .then(setMessage(`${pers.name} have been removed.`))
         .then(setTimeout(() => {
-          SetMessage(null)
+          setMessage(null)
         }, 5000))
         .catch(error => {
-          SetMessage(`Fail: ${pers.name} has already been removed from server!`)
+          setMessage(`Fail: ${pers.name} has already been removed from server!`)
           setTimeout(() => {
-            SetMessage(null)
+            setMessage(null)
           }, 5000);
         })
         }
