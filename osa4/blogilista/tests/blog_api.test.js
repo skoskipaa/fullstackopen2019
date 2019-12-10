@@ -110,6 +110,34 @@ test('new blog must have a title and an url', async () => {
 
 })
 
+test('a blog can be deleted', async () => {
+    const response = await api.get('/api/blogs')
+    const blogToDelete = response.body[0]
+
+    await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .expect(204)
+
+    const remainingBlogs = await api.get('/api/blogs')
+    expect(remainingBlogs.body.length).toBe(initialBlogs.length - 1)
+
+    })
+
+test('a blog can be modified', async () => {
+    const response = await api.get('/api/blogs')
+    const blogToUpdate = response.body[0]
+
+    const updates = {
+        likes: 100
+    }
+
+    await api
+        .put(`/api/blogs/${blogToUpdate.id}`)
+        .send(updates)
+        .expect(200)
+
+    }) 
+
 afterAll(() => {
     mongoose.connection.close()
 })
