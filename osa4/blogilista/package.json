@@ -4,15 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch": "nodemon index.js",
-    "start": "node index.js",
-    "test": "jest --verbose"
+    "watch": "cross-env NODE_ENV=development nodemon index.js",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand"
   },
   "author": "Saara Koskipaa",
   "license": "MIT",
   "devDependencies": {
+    "cross-env": "^6.0.3",
     "jest": "^24.9.0",
-    "nodemon": "^1.19.4"
+    "nodemon": "^1.19.4",
+    "supertest": "^4.0.2"
   },
   "dependencies": {
     "cors": "^2.8.5",
