@@ -99,5 +99,26 @@ describe('favorite blog', () => {
         }
         expect(result).toEqual(rightAnswer)
     })
+})
 
+describe('most blogs', () => {
+    test('finds the author with most blogs', () => {
+        const result = listHelper.mostBlogs(blogs)
+        const rightAnswer = {
+          "author": "Robert C. Martin",
+          "blogs": 3
+        }
+        expect(result).toEqual(rightAnswer)
+    })
+})
+
+describe('author with most likes', () => {
+    test('finds the author with most total likes', () => {
+      const result = listHelper.mostLikes(blogs)
+      const rightAnswer = {
+        "author": "Robert C. Martin",
+        "likes": 22
+      }
+      expect(result).toEqual(rightAnswer)
+    })
 })
