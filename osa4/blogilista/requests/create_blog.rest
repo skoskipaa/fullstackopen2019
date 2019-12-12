@@ -1,10 +1,10 @@
 post http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImlpbmVzIiwiaWQiOiI1ZGYxNDNiOWQzZWU4ZDI1MzFmYmEwMWEiLCJpYXQiOjE1NzYxNTc3NDR9.-LHL9q_4xIwkZdnaDgc2eZWZzFCaCuiFoeT8qychBu4
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImlpbmVzIiwiaWQiOiI1ZGYxNDNiOWQzZWU4ZDI1MzFmYmEwMWEiLCJpYXQiOjE1NzYxNjE1NzB9.AIpkBNaSz8TPIWTY7r43geazMjZFAWWtQQMB6JF1fvg
 
 {
-"title": "The Hobbit",
+"title": "The Silmarillion",
 "author" : "JRR Tolkien",
 "url": "www.hs.fi",
-"likes": 600
+"likes": 1600
 }
