@@ -1,40 +1,20 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const helper = require('./test_helper')
 const app = require('../app')
 const Blog = require('../models/blog')
 const api = supertest(app)
 
-const initialBlogs = [
-    {
-        title: "React patterns",
-        author: "Michael Chan",
-        url: "https://reactpatterns.com/",
-        likes: 7
-    },
-    {
-        title: "Go To Statement Considered Harmful",
-        author: "Edsger W. Dijkstra",
-        url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-        likes: 5
-    },
-    {
-        title: "First class tests",
-        author: "Robert C. Martin",
-        url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
-        likes: 10
-    }
-]
-
 beforeEach(async () => {
     await Blog.deleteMany({})
 
-    let blogObject = new Blog(initialBlogs[0])
+    let blogObject = new Blog(helper.initialBlogs[0])
     await blogObject.save()
 
-    blogObject = new Blog(initialBlogs[1])
+    blogObject = new Blog(helper.initialBlogs[1])
     await blogObject.save()
 
-    blogObject = new Blog(initialBlogs[2])
+    blogObject = new Blog(helper.initialBlogs[2])
     await blogObject.save()
 
 })
@@ -48,7 +28,7 @@ test('api returns blogs', async () => {
 
 test('the count of returned blogs is correct', async () => {
     const response = await api.get('/api/blogs')
-    expect(response.body.length).toBe(initialBlogs.length)
+    expect(response.body.length).toBe(helper.initialBlogs.length)
 })
 
 test('identification field is called id', async () => {
@@ -71,10 +51,10 @@ test('a valid blog can be added', async () => {
         .expect(200)
         .expect('Content-Type', /application\/json/)
     
-    const response = await api.get('/api/blogs')
-    const titles = response.body.map(res => res.title)
+    const blogsAtEnd = await helper.blogsInDatabase()
+    const titles = blogsAtEnd.map(res => res.title)
 
-    expect(response.body.length).toBe(initialBlogs.length + 1)
+    expect(blogsAtEnd.length).toBe(helper.initialBlogs.length + 1)
     expect(titles).toContain('Type wars')
 })
 
@@ -90,10 +70,10 @@ test('set likes to zero if no value is given', async () => {
         .expect(200)
         .expect('Content-Type', /application\/json/)
 
-    const response = await api.get('/api/blogs')
-    const latest = response.body.length - 1
+    const blogsAtEnd = await helper.blogsInDatabase()
+    const latest = blogsAtEnd.length - 1
     
-    expect(response.body[latest].likes).toBe(0)
+    expect(blogsAtEnd[latest].likes).toBe(0)
 
 })
 
@@ -106,7 +86,7 @@ test('new blog must have a title and an url', async () => {
         .post('/api/blogs')
         .send(newBlog)
         .expect(400)
-        .expect('Bad request')
+        .expect('Content-Type', /application\/json/)
 
 })
 
@@ -118,8 +98,8 @@ test('a blog can be deleted', async () => {
         .delete(`/api/blogs/${blogToDelete.id}`)
         .expect(204)
 
-    const remainingBlogs = await api.get('/api/blogs')
-    expect(remainingBlogs.body.length).toBe(initialBlogs.length - 1)
+    const remainingBlogs = await helper.blogsInDatabase()
+    expect(remainingBlogs.length).toBe(helper.initialBlogs.length - 1)
 
     })
 
