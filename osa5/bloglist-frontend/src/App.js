@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import blogService from './services/blogService'
 import loginService from './services/login'
 import Blog from './components/Blog'
+import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -10,24 +11,39 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
-  // Refaktoroitavaa ...
+  const [blogFormVisible, setBlogFormVisible] = useState(false)
+
+  // Refaktoroitavaa blogformiin... ?
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
 
+  /*
   useEffect(() => {
     blogService.getAll().then(initialBlogs => {
       setBlogs(initialBlogs)
     })
-  }, [])
+  }, []) */
+
+  useEffect(() => {
+   blogService.getAll().then(initialBlogs => {
+     initialBlogs.sort((a, b) => {
+       return b.likes - a.likes
+     })
+     setBlogs(initialBlogs)
+   })
+}, []) 
+
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
       const user =JSON.parse(loggedUserJSON)
       setUser(user)
+      blogService.setToken(user.token)
     }
   }, [])
+  
 
   const handleLogout = async (event) => {
     window.localStorage.removeItem('loggedUser')
@@ -71,37 +87,32 @@ const App = () => {
       </form>
   )
   
-  // refaktoroitavaa
-  const handleTitleChange = (event) => {
-    setNewTitle(event.target.value)
-  }
+  const blogForm = () => {
+    const hideWhenVisible = { display: blogFormVisible ? 'none' : '' }
+    const showWhenVisible = { display: blogFormVisible ? '' : 'none' }
 
-  const handleAuthorChange = (event) => {
-    setNewAuthor(event.target.value)
-  }
 
-  const handleUrlChange = (event) => {
-    setNewUrl(event.target.value)
-  }
-  const blogForm = () => (
-
-    <form onSubmit={addBlog}>
-      <div>title
-        <input type="text" value={newTitle} name="Title"
-        onChange={handleTitleChange} />
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setBlogFormVisible(true)}>add a blog</button>
+        </div>
+        <div style={showWhenVisible}>
+          <BlogForm
+            newTitle={newTitle}
+            newAuthor={newAuthor}
+            newUrl={newUrl}
+            handleTitleChange={({ target }) => setNewTitle(target.value)}
+            handleAuthorChange={({ target}) => setNewAuthor(target.value)}
+            handleUrlChange={({ target }) => setNewUrl(target.value)}
+            addBlog={addBlog}
+          />
+          <button onClick={() => setBlogFormVisible(false)}>hide</button>
+        </div>
       </div>
-      <div>author
-      <input type="text" value={newAuthor} name="Author"
-      onChange={handleAuthorChange} />
-      </div>
-      <div>url 
-      <input type="text" value={newUrl} name="Url"
-      onChange={handleUrlChange} />
-      </div>
-      <button type="submit">Add</button>
-    </form>
 
-  )
+    )
+  }
 
   const addBlog = async (event) => {
     event.preventDefault()
@@ -114,6 +125,7 @@ const App = () => {
 
     try {
       const response = await blogService.create(blogObject)
+      console.log(response)
       setBlogs(blogs.concat(response))
       setNewTitle('')
       setNewAuthor('')
@@ -131,6 +143,19 @@ const App = () => {
       }, 5000)
     }
   }
+  
+  const deleteBlog = async (blog) => {
+    if (window.confirm(`remove blog ${blog.title}?`)) {
+    try {
+      const response = await blogService.deleteBlog(blog)
+      console.log(response)
+      setBlogs(blogs.filter(b => b.id !== blog.id))
+    } catch (exception) {
+      console.log('FAIL')
+    }
+  }
+}
+  
 
   const Notification = ({ message }) => {
     if (message === null) {
@@ -148,8 +173,32 @@ const App = () => {
     <Blog
         key={blog.id}
         blog={blog}
+        addLike={() => addLike(blog)}
+        deleteBlog={() => deleteBlog(blog)}
+        loggedUser={user}
         />
         )
+
+
+  const addLike = async (blog) => {
+      
+    const updatedBlog = {
+      id: blog.id,
+      user: blog.user,
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url
+      }
+      
+      try {
+        const response = await blogService.update(updatedBlog)
+        setBlogs(blogs.map(b => b.id !== updatedBlog.id ? b : updatedBlog) )
+      } catch (exception) {
+        console.log('FAIL')
+          }
+      
+        }
 
   return (
     <div>
