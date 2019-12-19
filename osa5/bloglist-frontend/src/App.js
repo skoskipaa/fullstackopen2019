@@ -3,20 +3,25 @@ import blogService from './services/blogService'
 import loginService from './services/login'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
+import { useField } from './hooks'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  //const [username, setUsername] = useState('')
+  //const [password, setPassword] = useState('')
+  const username = useField('text')
+  const password = useField('password')
   const [user, setUser] = useState(null)
 
   const [blogFormVisible, setBlogFormVisible] = useState(false)
 
-  // Refaktoroitavaa BlogFormiin... ?
-  const [newTitle, setNewTitle] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
-  const [newUrl, setNewUrl] = useState('')
+  //const [newTitle, setNewTitle] = useState('')
+  //const [newAuthor, setNewAuthor] = useState('')
+  //const [newUrl, setNewUrl] = useState('')
+  const newTitle = useField('text')
+  const newAuthor = useField('text')
+  const newUrl = useField('text')
 
   /*
   useEffect(() => {
@@ -38,7 +43,7 @@ const App = () => {
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
-      const user =JSON.parse(loggedUserJSON)
+      const user = JSON.parse(loggedUserJSON)
       setUser(user)
       blogService.setToken(user.token)
     }
@@ -52,16 +57,24 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
+
+    const creds = {
+      username: username.value,
+      password: password.value
+    }
+
     try {
-      const user = await loginService.login({
-        username, password
-      })
+      const user = await loginService.login(
+        creds
+      )
 
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
+      username.reset()
+      password.reset()
+      //setUsername('')
+      //setPassword('')
     } catch (exception) {
       setErrorMessage('Wrong username or password')
       setTimeout(() => {
@@ -72,39 +85,37 @@ const App = () => {
 
   const loginForm = () => (
 
-    <form onSubmit={handleLogin}>
+    <form onSubmit={handleLogin} className="loginForm">
       <div>
           username
-        <input type="text" value={username} name="Username"
-          onChange={({ target }) => setUsername(target.value)}/>
+        <input {...username.noReset}/>
       </div>
       <div>
           password
-        <input type="password" value={password} name="Password"
-          onChange={({ target }) => setPassword(target.value)}/>
+        <input {...password.noReset}/>
       </div>
       <button type="submit">login</button>
     </form>
   )
 
   const blogForm = () => {
-    const hideWhenVisible = { display: blogFormVisible ? 'none' : '' }
-    const showWhenVisible = { display: blogFormVisible ? '' : 'none' }
+    const showOnlyAddButton = { display: blogFormVisible ? 'none' : '' }
+    const showBlogForm = { display: blogFormVisible ? '' : 'none' }
 
 
     return (
       <div>
-        <div style={hideWhenVisible}>
+        <div style={showOnlyAddButton}>
           <button onClick={() => setBlogFormVisible(true)}>add a blog</button>
         </div>
-        <div style={showWhenVisible}>
+        <div style={showBlogForm}>
           <BlogForm
-            newTitle={newTitle}
-            newAuthor={newAuthor}
-            newUrl={newUrl}
-            handleTitleChange={({ target }) => setNewTitle(target.value)}
-            handleAuthorChange={({ target }) => setNewAuthor(target.value)}
-            handleUrlChange={({ target }) => setNewUrl(target.value)}
+            newTitle={newTitle.value}
+            newAuthor={newAuthor.value}
+            newUrl={newUrl.value}
+            handleTitleChange={newTitle.onChange}
+            handleAuthorChange={newAuthor.onChange}
+            handleUrlChange={newUrl.onChange}
             addBlog={addBlog}
           />
           <button onClick={() => setBlogFormVisible(false)}>hide</button>
@@ -118,19 +129,20 @@ const App = () => {
     event.preventDefault()
 
     const blogObject = {
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl
+      title: newTitle.value,
+      author: newAuthor.value,
+      url: newUrl.value
     }
 
     try {
       const response = await blogService.create(blogObject)
       setBlogs(blogs.concat(response))
-      setNewTitle('')
-      setNewAuthor('')
-      setNewUrl('')
+      console.log(response)
+      newTitle.reset()
+      newAuthor.reset()
+      newUrl.reset()
 
-      setErrorMessage(`A new blog "${newTitle}" was added succesfully!` )
+      setErrorMessage(`A new blog "${newTitle.value}" was added succesfully!` )
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)

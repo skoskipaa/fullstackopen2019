@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+
 const BlogForm = ({
   addBlog,
   handleTitleChange,
@@ -14,15 +15,15 @@ const BlogForm = ({
     <div>
       <form onSubmit={addBlog}>
         <h4>Add a new blog</h4>
-        <div>title
+        <div>Title
           <input type="text" value={newTitle} name="Title"
             onChange={handleTitleChange} />
         </div>
-        <div>author
+        <div>Author
           <input type="text" value={newAuthor} name="Author"
             onChange={handleAuthorChange} />
         </div>
-        <div>url
+        <div>Url
           <input type="text" value={newUrl} name="Url"
             onChange={handleUrlChange} />
         </div>
