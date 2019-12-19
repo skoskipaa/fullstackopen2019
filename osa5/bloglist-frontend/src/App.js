@@ -13,7 +13,7 @@ const App = () => {
 
   const [blogFormVisible, setBlogFormVisible] = useState(false)
 
-  // Refaktoroitavaa blogformiin... ?
+  // Refaktoroitavaa BlogFormiin... ?
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
@@ -26,13 +26,13 @@ const App = () => {
   }, []) */
 
   useEffect(() => {
-   blogService.getAll().then(initialBlogs => {
-     initialBlogs.sort((a, b) => {
-       return b.likes - a.likes
-     })
-     setBlogs(initialBlogs)
-   })
-}, []) 
+    blogService.getAll().then(initialBlogs => {
+      initialBlogs.sort((a, b) => {
+        return b.likes - a.likes
+      })
+      setBlogs(initialBlogs)
+    })
+  }, [])
 
 
   useEffect(() => {
@@ -43,9 +43,9 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
-  
 
-  const handleLogout = async (event) => {
+
+  const handleLogout = async () => {
     window.localStorage.removeItem('loggedUser')
     setUser(null)
   }
@@ -71,22 +71,22 @@ const App = () => {
   }
 
   const loginForm = () => (
-    
-      <form onSubmit={handleLogin}>
-        <div>
+
+    <form onSubmit={handleLogin}>
+      <div>
           username
-          <input type="text" value={username} name="Username" 
+        <input type="text" value={username} name="Username"
           onChange={({ target }) => setUsername(target.value)}/>
-        </div>
-        <div>
+      </div>
+      <div>
           password
-          <input type="password" value={password} name="Password"
+        <input type="password" value={password} name="Password"
           onChange={({ target }) => setPassword(target.value)}/>
-        </div>
-        <button type="submit">login</button>
-      </form>
+      </div>
+      <button type="submit">login</button>
+    </form>
   )
-  
+
   const blogForm = () => {
     const hideWhenVisible = { display: blogFormVisible ? 'none' : '' }
     const showWhenVisible = { display: blogFormVisible ? '' : 'none' }
@@ -103,7 +103,7 @@ const App = () => {
             newAuthor={newAuthor}
             newUrl={newUrl}
             handleTitleChange={({ target }) => setNewTitle(target.value)}
-            handleAuthorChange={({ target}) => setNewAuthor(target.value)}
+            handleAuthorChange={({ target }) => setNewAuthor(target.value)}
             handleUrlChange={({ target }) => setNewUrl(target.value)}
             addBlog={addBlog}
           />
@@ -125,7 +125,6 @@ const App = () => {
 
     try {
       const response = await blogService.create(blogObject)
-      console.log(response)
       setBlogs(blogs.concat(response))
       setNewTitle('')
       setNewAuthor('')
@@ -143,45 +142,44 @@ const App = () => {
       }, 5000)
     }
   }
-  
+
   const deleteBlog = async (blog) => {
     if (window.confirm(`remove blog ${blog.title}?`)) {
-    try {
-      const response = await blogService.deleteBlog(blog)
-      console.log(response)
-      setBlogs(blogs.filter(b => b.id !== blog.id))
-    } catch (exception) {
-      console.log('FAIL')
+      try {
+        const response = await blogService.deleteBlog(blog)
+        console.log(response)
+        setBlogs(blogs.filter(b => b.id !== blog.id))
+      } catch (exception) {
+        console.log('FAIL')
+      }
     }
   }
-}
-  
+
 
   const Notification = ({ message }) => {
     if (message === null) {
       return null
-    } 
-      return (
+    }
+    return (
       <div>
         {message}
-      </div> 
-      )
-    
+      </div>
+    )
+
   }
 
   const rows = () => blogs.map(blog =>
     <Blog
-        key={blog.id}
-        blog={blog}
-        addLike={() => addLike(blog)}
-        deleteBlog={() => deleteBlog(blog)}
-        loggedUser={user}
-        />
-        )
-
+      key={blog.id}
+      blog={blog}
+      addLike={() => addLike(blog)}
+      deleteBlog={() => deleteBlog(blog)}
+      loggedUser={user}
+    />
+  )
 
   const addLike = async (blog) => {
-      
+
     const updatedBlog = {
       id: blog.id,
       user: blog.user,
@@ -189,16 +187,16 @@ const App = () => {
       author: blog.author,
       title: blog.title,
       url: blog.url
-      }
-      
-      try {
-        const response = await blogService.update(updatedBlog)
-        setBlogs(blogs.map(b => b.id !== updatedBlog.id ? b : updatedBlog) )
-      } catch (exception) {
-        console.log('FAIL')
-          }
-      
-        }
+    }
+
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await blogService.update(updatedBlog)
+      setBlogs(blogs.map(b => b.id !== updatedBlog.id ? b : updatedBlog) )
+    } catch (exception) {
+      console.log('FAIL')
+    }
+  }
 
   return (
     <div>
@@ -209,14 +207,14 @@ const App = () => {
       {user === null ?
         loginForm() :
         <div>
-          <p><strong>{user.name}</strong> is logged in 
-          <button onClick={handleLogout}>logout</button></p>
+          <p><strong>{user.name}</strong> is logged in
+            <button onClick={handleLogout}>logout</button></p>
           <div>{blogForm()}</div>
-        {rows()}
+          {rows()}
         </div>
-        }
+      }
     </div>
   )
 }
 
-export default App;
+export default App
