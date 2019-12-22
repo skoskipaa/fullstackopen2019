@@ -20,12 +20,12 @@ const asObject = (anecdote) => {
 const initialState = anecdotesAtStart.map(asObject)
 
 const reducer = (state = initialState, action) => {
-  console.log('state now: ', state)
-  console.log('action', action)
+  //console.log('state now: ', state)
+  //console.log('action', action)
   switch(action.type) {
     case 'VOTE':
       const anecdoteToVote = state.find(an => an.id === action.data.id)
-      console.log(anecdoteToVote)
+      //console.log(anecdoteToVote)
       return state
       .map(anecd => anecd.id !== anecdoteToVote.id
         ? anecd
@@ -34,7 +34,7 @@ const reducer = (state = initialState, action) => {
     
     case 'NEW_NOTE':
       const newAnecdote = asObject(action.data)
-      console.log(newAnecdote)
+      //console.log(newAnecdote)
       return state.concat(newAnecdote)
       
     default:
