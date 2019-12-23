@@ -1,33 +1,21 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { addVote } from '../reducers/anecdoteReducer'
 import { setNotification, clearNotification } from '../reducers/notificationReducer'
 
 const AnecdoteList = (props) => {
-    const store = props.store
-    const anecdotes = store.getState().anecdotes
-    let filter = store.getState().filter.data
-
-    if (filter === undefined) {
-        filter = ''
-    }
     
-    const filteredList = anecdotes.filter(an => {
-        //console.log(an.content)
-        return an.content.toLowerCase().includes(filter.toLowerCase())
-    })
-
-
     const vote = (id) => {
-        store.dispatch(addVote(id))
-        const anecdote = anecdotes.find(an => an.id === id)
-        store.dispatch(setNotification(
-            `You voted '${anecdote.content}'`))
-        setTimeout(() => store.dispatch(clearNotification()), 5000)
+        props.addVote(id)
+        const anecdote = props.filteredAnecdotes.find(an => an.id === id)
+        props.setNotification(
+            `You voted '${anecdote.content}'`)
+        setTimeout(() => props.clearNotification(), 5000)
       }
 
     return (
         <div>
-        {filteredList.map(anecdote =>
+        {props.filteredAnecdotes.map(anecdote =>
           <div key={anecdote.id}>
             <div>
               {anecdote.content}
@@ -42,4 +30,28 @@ const AnecdoteList = (props) => {
     )
 }
 
-export default AnecdoteList
+const filteredList = ({ anecdotes, filter }) => {
+   
+    return anecdotes.filter(an => an.content.toLowerCase().includes(filter.toLowerCase()))
+}
+
+const mapStateToProps = (state) => {
+    console.log(state)
+    return {
+        //anecdotes: state.anecdotes,
+        //filter: state.filter
+        filteredAnecdotes: filteredList(state)
+    }
+}
+
+const mapDispatchToProps = {
+        addVote: addVote,
+        setNotification: setNotification,
+        clearNotification: clearNotification
+}
+
+const ConnectedList = connect(
+    mapStateToProps,
+    mapDispatchToProps)(AnecdoteList)
+
+export default ConnectedList
