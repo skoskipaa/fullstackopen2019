@@ -5,14 +5,14 @@ const notificationReducer = (state = initialState, action) => {
     //console.log('action', action)
     switch(action.type) {
         case 'NOTIFY':
-            console.log(action.data)
+            //console.log(action.data)
             return action.data
         default:
             return state
     }
     
 }
-
+/*
 export const setNotification = (content) => {
     return {
         type: 'NOTIFY',
@@ -26,7 +26,22 @@ export const clearNotification = () => {
         data: ''
     }
 }
+*/
+export const setNotification = ( notification, time ) => {
+    return async dispatch => {
 
+        dispatch({
+            type: 'NOTIFY',
+            data: notification
+        })
+        setTimeout(() => {
+            dispatch({
+                type: 'NOTIFY',
+                data: ''
+            })
+        }, time)
+    }
+}
 
 
 export default notificationReducer
