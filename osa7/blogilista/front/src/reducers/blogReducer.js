@@ -7,7 +7,6 @@ const blogReducer = (state = [], action) => {
   case 'INITIALIZE_BLOGS':
     return action.data.sort(sortByLikes)
   case 'LIKE':
-    console.log('likeuser', action.data)
     return state
       .map(blog => blog.id !== action.data.id ? blog : action.data)
       .sort(sortByLikes)

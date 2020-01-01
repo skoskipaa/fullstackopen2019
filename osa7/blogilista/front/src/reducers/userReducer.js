@@ -22,7 +22,6 @@ export const userLogin = (credentials) => {
       })
 
     } catch (exception) {
-      console.log('ERROR', exception)
       return null
     }
   }
