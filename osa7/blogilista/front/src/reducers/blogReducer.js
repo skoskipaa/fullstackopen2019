@@ -64,9 +64,6 @@ export const addLike = (blog) => {
 export const initializeBlogs = () => {
   return async dispatch => {
     const blogs = await blogService.getAll()
-    blogs.sort((a, b) => {
-      return b.likes - a.likes
-    })
     dispatch({
       type: 'INITIALIZE_BLOGS',
       data: blogs

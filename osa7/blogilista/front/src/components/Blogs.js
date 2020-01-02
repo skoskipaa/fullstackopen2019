@@ -1,6 +1,9 @@
 import React from 'react'
 import Blog from './Blog'
+import NewBlogForm from './NewBlogForm'
+import Notification from './Notification'
 import { addLike, deleteBlog } from '../reducers/blogReducer'
+import { initializeUsers } from '../reducers/usersReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { connect } from 'react-redux'
 
@@ -12,23 +15,29 @@ const Blogs = (props) => {
 
   }
 
-  const deleteBlog = (blog) => {
+  const deleteBlog = async (blog) => {
     if (window.confirm(`remove blog ${blog.title}?`)) {
-      props.deleteBlog(blog)
+      await props.deleteBlog(blog)
+      await props.initializeUsers()
       props.setNotification(`"${blog.title}" was deleted!`, 3000)
     }
   }
 
   return (
-    props.blogs.map(blog =>
+    <div>
+      <Notification />
+      <NewBlogForm />
 
-      <Blog
-        key={blog.id}
-        blog={blog}
-        addLike={() => addLike(blog)}
-        deleteBlog={() => deleteBlog(blog)}
-        loggedUser={props.user}
-      />)
+      {props.blogs.map(blog =>
+
+        <Blog
+          key={blog.id}
+          blog={blog}
+          addLike={() => addLike(blog)}
+          deleteBlog={() => deleteBlog(blog)}
+          loggedUser={props.user}
+        />)}
+    </div>
   )
 }
 
@@ -42,7 +51,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   addLike: addLike,
   setNotification: setNotification,
-  deleteBlog: deleteBlog
+  deleteBlog: deleteBlog,
+  initializeUsers: initializeUsers
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Blogs)

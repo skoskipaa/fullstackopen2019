@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { setNotification } from '../reducers/notificationReducer'
+import { initializeUsers } from '../reducers/usersReducer'
 import { createBlog } from '../reducers/blogReducer'
 import { useField } from '../hooks'
 import { connect } from 'react-redux'
@@ -27,8 +28,8 @@ const NewBlogForm = (props) => {
       props.setNotification('Blog creation failed, all fields are required!', 5000)
 
     } else {
-      const response = await props.createBlog(blogObject)
-      console.log(response)
+      await props.createBlog(blogObject)
+      await props.initializeUsers()
       newTitle.reset()
       newAuthor.reset()
       newUrl.reset()
@@ -70,7 +71,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  setNotification, createBlog
+  setNotification, createBlog, initializeUsers
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewBlogForm)

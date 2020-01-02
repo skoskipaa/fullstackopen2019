@@ -1,4 +1,5 @@
 import React from 'react'
+import Notification from './Notification'
 import { setNotification } from '../reducers/notificationReducer'
 import { userLogin, userLogout, setUser } from '../reducers/userReducer'
 import { useField } from '../hooks'
@@ -22,10 +23,13 @@ const LoginForm = (props) => {
       password.reset()
       props.setNotification('Wrong username or password', 5000)
     }
+    console.log(props)
+
   }
 
   return (
     <div>
+      <Notification />
       <form onSubmit={handleLogin} className="loginForm">
         <div>
           username
