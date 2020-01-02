@@ -28,6 +28,9 @@ let BlogView = (props) => {
     props.history.push('/blogs')
   }
 
+  console.log(props.blog)
+
+  
 
   const showDelete = (props.blog.user.username === props.user.username) ? true : false
 
@@ -45,6 +48,13 @@ let BlogView = (props) => {
         {showDelete &&
       <button onClick={() => deleteBlog(props.blog)}>Delete</button>}
       </div>
+      <div>
+        <h4>Comments</h4>
+        <ul>
+          {props.blog.comments.map(com =>
+            <li key={com.id}>{com.content}</li>)}
+        </ul>
+      </div>
     </div>
 
   )
@@ -54,7 +64,8 @@ BlogView = withRouter(BlogView)
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user
+    user: state.user,
+    blogs: state.blogs
   }
 }
 

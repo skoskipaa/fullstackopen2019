@@ -1,12 +1,14 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const Comment = require('../models/comment')
 const jwt = require('jsonwebtoken')
 
 blogsRouter.get('/', async (request, response) => {
     const blogs = await Blog
         .find({})
         .populate('user', { username: 1, name: 1 })
+        .populate('comments')
     response.json(blogs.map(blog => blog.toJSON()))
     })
 
@@ -38,6 +40,34 @@ blogsRouter.post('/', async (request, response, next) => {
         next(exception)
     }
 
+})
+
+blogsRouter.post('/:id/comments', async (request, response, next) => {
+    const body = request.body
+
+    try {
+        const decodedToken = jwt.verify(request.token, process.env.SECRET)
+        if (!request.token || !decodedToken.id) {
+            return response.status(401).json({ error: 'token missing or invalid' })
+        }
+
+        const blog = await Blog.findById(request.params.id).populate('blog')
+        const comment = new Comment({
+            content: body.content,
+            blog: blog
+        })
+
+        const savedComment = await comment.save()
+        blog.comments = blog.comments.concat(savedComment._id)
+        await blog.save()
+
+        response.json(savedComment.toJSON())
+
+    } catch(exception) {
+
+        next(exception)
+
+    }
 })
 
 /*blogsRouter.delete('/:id', async (request, response, next) => {
@@ -87,7 +117,6 @@ blogsRouter.put('/:id', async (request, response, next) => {
     try {
         const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true }).populate('user')
         response.json(updatedBlog.toJSON())
-        //console.log('TERVEISET BÄKKÄRILTÄ: ', updatedBlog.toJSON())
     } catch (exception) {
         next(exception)
     }
