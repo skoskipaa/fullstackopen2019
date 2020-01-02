@@ -23,7 +23,6 @@ const LoginForm = (props) => {
       password.reset()
       props.setNotification('Wrong username or password', 5000)
     }
-    console.log(props)
 
   }
 

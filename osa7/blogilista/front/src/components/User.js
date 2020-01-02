@@ -1,11 +1,9 @@
 import React from 'react'
-//import { connect } from 'react-redux'
 
 const User = (props) => {
-  if ( props.user === undefined) { 
+  if (props.user === undefined) {
     return null
   }
-
 
   return (
     <div>
@@ -19,7 +17,5 @@ const User = (props) => {
   )
 
 }
-
-
 
 export default User

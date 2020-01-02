@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { Container, Menu, Button  } from 'semantic-ui-react'
 import blogService from './services/blogService'
 import Blogs from './components/Blogs'
 import Users from './components/Users'
 import LoginForm from './components/LoginForm'
 import User from './components/User'
+import BlogView from './components/BlogView'
 import { initializeBlogs } from './reducers/blogReducer'
 import { userLogout, setUser } from './reducers/userReducer'
 import { initializeUsers } from './reducers/usersReducer'
@@ -19,6 +21,7 @@ const App = (props) => {
 
   useEffect(() => {
     props.initializeBlogs()
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -36,14 +39,11 @@ const App = (props) => {
     props.userLogout()
   }
 
-  console.log(props.users)
-
   const findUserById = (id) => props.users.find(u => u.id === id)
-
-
+  const findBlogById = (id) => props.blogs.find(b => b.id === id)
 
   return (
-    <div>
+    <Container>
       <h1>Blogs</h1>
 
       {props.user === null ?
@@ -53,22 +53,32 @@ const App = (props) => {
         <div>
           <Router>
             <div>
-              <Link to="/blogs">Blogs</Link>
-              <Link to="/users">Users</Link>
+              <Menu>
+                <Menu.Item link>
+                  <Link to="/blogs">Blogs</Link>
+                </Menu.Item>
+                <Menu.Item link>
+                  <Link to="/users">Users</Link>
+                </Menu.Item>
+                <Menu.Item>
+                  <p><strong>{props.user.name} </strong> is logged in</p>
+                </Menu.Item>
+                <Menu.Item>
+                  <Button onClick={handleLogout}>logout</Button>
+                </Menu.Item>
+              </Menu>
+              <Route exact path="/" render={() => <Blogs user={props.user} />} />
+              <Route exact path="/blogs" render={() => <Blogs user={props.user} />} />
+              <Route exact path="/blogs/:id" render={({ match }) =>
+                <BlogView blog={findBlogById(match.params.id)} />} />
+              <Route exact path="/users" render={() => <Users />} />
+              <Route exact path="/users/:id" render={({ match }) =>
+                <User user={findUserById(match.params.id)} />} />
             </div>
-            <p>
-              <strong>{props.user.name}</strong> is logged in
-              <button onClick={handleLogout}>logout</button>
-            </p>
-            <Route exact path="/" render={() => <Blogs user={props.user} />} />
-            <Route path="/blogs" render={() => <Blogs user={props.user} />} />
-            <Route exact path="/users" render={() => <Users />} />
-            <Route exact path="/users/:id" render={({ match }) =>
-              <User user={findUserById(match.params.id)} />} />
           </Router>
         </div>
       }
-    </div>
+    </Container>
   )
 }
 
@@ -87,8 +97,3 @@ export default connect(mapStateToProps, {
   userLogout,
   setUser
 })(App)
-
-/*
- <Route exact path="/users/:id" render={({ match }) =>
-              <User user={findUserById(match.params.id)} />} />
-*/
