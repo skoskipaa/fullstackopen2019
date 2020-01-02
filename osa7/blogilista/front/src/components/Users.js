@@ -1,5 +1,5 @@
 import React from 'react'
-import User from './User'
+import UserRow from './UserRow'
 import { connect } from 'react-redux'
 
 const Users = (props) => {
@@ -11,7 +11,7 @@ const Users = (props) => {
         <tbody>
           <tr><th>Name</th><th>blogs</th></tr>
           {props.users.map(user =>
-            <User
+            <UserRow
               key={user.id}
               user={user}
             />

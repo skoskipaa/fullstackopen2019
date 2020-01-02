@@ -1,7 +1,7 @@
 import React from 'react'
 import Notification from './Notification'
 import { setNotification } from '../reducers/notificationReducer'
-import { userLogin, userLogout, setUser } from '../reducers/userReducer'
+import { userLogin } from '../reducers/userReducer'
 import { useField } from '../hooks'
 import { connect } from 'react-redux'
 
@@ -53,7 +53,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  userLogin, userLogout, setNotification, setUser
+  userLogin, setNotification
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)

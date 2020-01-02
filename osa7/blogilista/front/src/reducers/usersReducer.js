@@ -4,8 +4,6 @@ const usersReducer = (state = [], action) => {
   switch(action.type) {
   case 'INIT_USERS':
     return action.data
-  case 'DELETE_FROM_USER':
-    return state
   default:
     return state
   }

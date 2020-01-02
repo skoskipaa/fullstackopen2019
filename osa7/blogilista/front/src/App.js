@@ -5,21 +5,20 @@ import blogService from './services/blogService'
 import Blogs from './components/Blogs'
 import Users from './components/Users'
 import LoginForm from './components/LoginForm'
-import { setNotification } from './reducers/notificationReducer'
-import { initializeBlogs, createBlog } from './reducers/blogReducer'
+import User from './components/User'
+import { initializeBlogs } from './reducers/blogReducer'
 import { userLogout, setUser } from './reducers/userReducer'
 import { initializeUsers } from './reducers/usersReducer'
 
 const App = (props) => {
 
   useEffect(() => {
-    props.initializeBlogs()
+    props.initializeUsers()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
-    props.initializeUsers()
-
+    props.initializeBlogs()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -36,6 +35,12 @@ const App = (props) => {
   const handleLogout = async () => {
     props.userLogout()
   }
+
+  console.log(props.users)
+
+  const findUserById = (id) => props.users.find(u => u.id === id)
+
+
 
   return (
     <div>
@@ -57,7 +62,9 @@ const App = (props) => {
             </p>
             <Route exact path="/" render={() => <Blogs user={props.user} />} />
             <Route path="/blogs" render={() => <Blogs user={props.user} />} />
-            <Route path="/users" render={() => <Users />} />
+            <Route exact path="/users" render={() => <Users />} />
+            <Route exact path="/users/:id" render={({ match }) =>
+              <User user={findUserById(match.params.id)} />} />
           </Router>
         </div>
       }
@@ -66,16 +73,22 @@ const App = (props) => {
 }
 
 const mapStateToProps = (state) => {
+
   return {
-    user: state.user
+    user: state.user,
+    users: state.users,
+    blogs: state.blogs
   }
 }
 
 export default connect(mapStateToProps, {
   initializeBlogs,
   initializeUsers,
-  setNotification,
-  createBlog,
   userLogout,
   setUser
 })(App)
+
+/*
+ <Route exact path="/users/:id" render={({ match }) =>
+              <User user={findUserById(match.params.id)} />} />
+*/
