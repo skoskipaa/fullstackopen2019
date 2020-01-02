@@ -1,11 +1,11 @@
 import React from 'react'
 import Notification from './Notification'
+import CommentForm from './CommentForm'
 import { setNotification } from '../reducers/notificationReducer'
 import { addLike, deleteBlog } from '../reducers/blogReducer'
 import { initializeUsers } from '../reducers/usersReducer'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-
 
 let BlogView = (props) => {
 
@@ -18,7 +18,6 @@ let BlogView = (props) => {
     props.setNotification(`You liked "${blog.title}"`, 3000)
   }
 
-
   const deleteBlog = async (blog) => {
     if (window.confirm(`remove blog ${blog.title}?`)) {
       await props.deleteBlog(blog)
@@ -27,10 +26,6 @@ let BlogView = (props) => {
     props.setNotification(`"${blog.title}" was deleted!`, 3000)
     props.history.push('/blogs')
   }
-
-  console.log(props.blog)
-
-  
 
   const showDelete = (props.blog.user.username === props.user.username) ? true : false
 
@@ -50,6 +45,7 @@ let BlogView = (props) => {
       </div>
       <div>
         <h4>Comments</h4>
+        <CommentForm id={props.blog.id}/>
         <ul>
           {props.blog.comments.map(com =>
             <li key={com.id}>{com.content}</li>)}

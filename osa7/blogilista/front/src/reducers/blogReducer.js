@@ -17,6 +17,9 @@ const blogReducer = (state = [], action) => {
     return state
       .concat(action.data)
       .sort(sortByLikes)
+  case 'ADD_COMMENT':           /// ?????
+    return state
+      .concat(action.data)
   default:
     return state
   }
@@ -56,6 +59,16 @@ export const addLike = (blog) => {
     const data = await blogService.update(changedBlog)
     dispatch({
       type: 'LIKE',
+      data: data
+    })
+  }
+}
+
+export const addComment = (comment, id) => {
+  return async dispatch => {
+    const data = await blogService.addComment(comment, id)
+    dispatch({
+      type: 'ADD_COMMENT',
       data: data
     })
   }
