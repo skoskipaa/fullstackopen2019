@@ -44,8 +44,6 @@ const App = (props) => {
 
   return (
     <Container>
-      <h1>Blogs</h1>
-
       {props.user === null ?
         <div>
           <LoginForm />
@@ -67,6 +65,7 @@ const App = (props) => {
                   <Button onClick={handleLogout}>logout</Button>
                 </Menu.Item>
               </Menu>
+              <h1>BlogFinder 2020</h1>
               <Route exact path="/" render={() => <Blogs user={props.user} />} />
               <Route exact path="/blogs" render={() => <Blogs user={props.user} />} />
               <Route exact path="/blogs/:id" render={({ match }) =>

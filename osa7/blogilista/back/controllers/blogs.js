@@ -70,15 +70,6 @@ blogsRouter.post('/:id/comments', async (request, response, next) => {
     }
 })
 
-/*blogsRouter.delete('/:id', async (request, response, next) => {
-    try {
-        await Blog.findByIdAndRemove(request.params.id)
-        response.status(204).end()
-    } catch (exception) {
-        next(exception)
-    }
-})*/
-
 blogsRouter.delete('/:id', async (request, response, next) => {        
         try {
             const blogToDelete = await Blog.findById(request.params.id)
@@ -113,9 +104,10 @@ blogsRouter.put('/:id', async (request, response, next) => {
     const blog = {
         likes: body.likes
     }
-
     try {
-        const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true }).populate('user')
+        const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+        .populate('user')
+        .populate('comments')
         response.json(updatedBlog.toJSON())
     } catch (exception) {
         next(exception)

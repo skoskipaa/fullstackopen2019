@@ -17,7 +17,7 @@ const blogReducer = (state = [], action) => {
     return state
       .concat(action.data)
       .sort(sortByLikes)
-  case 'ADD_COMMENT':           /// ?????
+  case 'ADD_COMMENT':
     return state
       .concat(action.data)
   default:

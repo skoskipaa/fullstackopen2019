@@ -4,6 +4,7 @@ import { initializeUsers } from '../reducers/usersReducer'
 import { createBlog } from '../reducers/blogReducer'
 import { useField } from '../hooks'
 import { connect } from 'react-redux'
+import { Button } from 'semantic-ui-react'
 
 const NewBlogForm = (props) => {
   const [blogFormVisible, setBlogFormVisible] = useState(false)
@@ -40,23 +41,28 @@ const NewBlogForm = (props) => {
   return (
     <div>
       <div style={showOnlyAddButton}>
-        <button onClick={() => setBlogFormVisible(true)}>add a blog</button>
+        <Button onClick={() => setBlogFormVisible(true)}>Add a blog</Button>
       </div>
       <div style={showBlogForm}>
-        <form onSubmit={addBlog}>
+        <form className="ui form" onSubmit={addBlog}>
           <h4>Add a new blog</h4>
-          <div>Title
+          <div className="field">
+            <label>Title</label>
             <input {...newTitle.noReset} />
           </div>
-          <div>Author
+          <div className="field">
+            <label>Author</label>
             <input {...newAuthor.noReset} />
           </div>
-          <div>Url
+          <div className="field">
+            <label>Url</label>
             <input {...newUrl.noReset} />
           </div>
-          <button type="submit">Add</button>
+          <Button primary type="submit">Add</Button>
         </form>
-        <button onClick={() => setBlogFormVisible(false)}>hide</button>
+        <br/>
+        <Button onClick={() => setBlogFormVisible(false)}>Hide this form</Button>
+
       </div>
     </div>
 

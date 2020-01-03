@@ -2,6 +2,7 @@ import React from 'react'
 import { useField } from '../hooks'
 import { addComment, initializeBlogs } from '../reducers/blogReducer'
 import { connect } from 'react-redux'
+import { Form, Container } from 'semantic-ui-react'
 
 const CommentForm = (props) => {
 
@@ -20,11 +21,17 @@ const CommentForm = (props) => {
 
   return (
     <div>
-      <form onSubmit={handleComment} >
-        <input {...comment.noReset}></input>
-        <button type="submit">Add comment</button>
-      </form>
-
+      <Container>
+        <Form onSubmit={handleComment} >
+          <Form.Group>
+            <Form.Input>
+              <label style={{ marginRight: '15px' }}>Comment</label>
+              <input {...comment.noReset}></input>
+            </Form.Input>
+            <Form.Button primary type="submit">Add comment</Form.Button>
+          </Form.Group>
+        </Form>
+      </Container>
     </div>
   )
 }

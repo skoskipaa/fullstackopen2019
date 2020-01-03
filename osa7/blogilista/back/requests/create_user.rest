@@ -2,5 +2,11 @@ post http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-"username": "akunen", "name" : "aku ankka", "password": "hanhi"
+"username": "aku", "name" : "Aku Nkka", "password": "hanhi"
 }
+
+
+
+// "id": "5e0f19df7fc5ee11a7196b6f"
+
+//  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFrdSIsImlkIjoiNWUwZjE5ZGY3ZmM1ZWUxMWE3MTk2YjZmIiwiaWF0IjoxNTc4MDQ4MDQ5fQ.PRMCGKpu1jWGMfaeNblzIA8eL1DVo-95Ii9X3R3rB7c"

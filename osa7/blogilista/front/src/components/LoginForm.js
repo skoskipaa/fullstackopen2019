@@ -4,6 +4,7 @@ import { setNotification } from '../reducers/notificationReducer'
 import { userLogin } from '../reducers/userReducer'
 import { useField } from '../hooks'
 import { connect } from 'react-redux'
+import { Form } from 'semantic-ui-react'
 
 const LoginForm = (props) => {
   const username = useField('text')
@@ -28,18 +29,20 @@ const LoginForm = (props) => {
 
   return (
     <div>
+      <h1>Log in to use BlogFinder 2020</h1>
       <Notification />
-      <form onSubmit={handleLogin} className="loginForm">
-        <div>
-          username
+      <Form onSubmit={handleLogin} className="loginForm">
+        <Form.Field>
+          <label>Username</label>
           <input {...username.noReset}/>
-        </div>
-        <div>
-          password
+        </Form.Field>
+        <Form.Field>
+          <label>Password</label>
           <input {...password.noReset}/>
-        </div>
-        <button type="submit">login</button>
-      </form>
+        </Form.Field>
+        
+        <Form.Button primary type="submit">login</Form.Button>
+      </Form>
     </div>
   )
 }
