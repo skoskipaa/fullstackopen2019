@@ -8,6 +8,7 @@
 [Osa 4](https://github.com/skoskipaa/fullstackopen2019/tree/master/osa4/blogilista)    
 [Osa 5](https://github.com/skoskipaa/fullstackopen2019/tree/master/osa5/bloglist-frontend)    
 [Osa 6](https://github.com/skoskipaa/fullstackopen2019/tree/master/osa6)    
+[Osa 7](https://github.com/skoskipaa/fullstackopen2019/tree/master/osa7)    
 
 
 [Osa 3](https://github.com/skoskipaa/puhelinluettelo-backend) eli puhelinluettelon backend on omassa repossaan.
