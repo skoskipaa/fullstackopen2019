@@ -34,13 +34,12 @@ const LoginForm = (props) => {
       <Form onSubmit={handleLogin} className="loginForm">
         <Form.Field>
           <label>Username</label>
-          <input {...username.noReset}/>
+          <input id='username' {...username.noReset}/>
         </Form.Field>
         <Form.Field>
           <label>Password</label>
-          <input {...password.noReset}/>
+          <input id='password' {...password.noReset}/>
         </Form.Field>
-        
         <Form.Button primary type="submit">login</Form.Button>
       </Form>
     </div>

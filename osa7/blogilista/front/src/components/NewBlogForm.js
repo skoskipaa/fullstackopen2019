@@ -48,17 +48,17 @@ const NewBlogForm = (props) => {
           <h4>Add a new blog</h4>
           <div className="field">
             <label>Title</label>
-            <input {...newTitle.noReset} />
+            <input id="title" {...newTitle.noReset} />
           </div>
           <div className="field">
             <label>Author</label>
-            <input {...newAuthor.noReset} />
+            <input id="author" {...newAuthor.noReset} />
           </div>
           <div className="field">
             <label>Url</label>
-            <input {...newUrl.noReset} />
+            <input id="url" {...newUrl.noReset} />
           </div>
-          <Button primary type="submit">Add</Button>
+          <Button id="submit" primary type="submit">Add</Button>
         </form>
         <br/>
         <Button onClick={() => setBlogFormVisible(false)}>Hide this form</Button>

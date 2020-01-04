@@ -40,13 +40,13 @@ let BlogView = (props) => {
           <Segment> <a href={props.blog.url}>{props.blog.url}</a></Segment>
           <Segment>
             {props.blog.likes} likes
-            <Button color="blue" size="tiny"
-              onClick={() => addLike(props.blog)} style={{marginLeft: '20px'}}>Like</Button>
+            <Button color="blue" size="tiny" id="like"
+              onClick={() => addLike(props.blog)} style={{ marginLeft: '20px' }}>Like</Button>
           </Segment>
           <Segment size="mini">Added by {props.blog.user.name}
             {showDelete &&
       <Button color="red" size="tiny"
-        onClick={() => deleteBlog(props.blog)} style={{marginLeft: '20px'}}>Delete blog</Button>}
+        onClick={() => deleteBlog(props.blog)} style={{ marginLeft: '20px' }}>Delete blog</Button>}
           </Segment>
         </Segment.Group>
         <div>

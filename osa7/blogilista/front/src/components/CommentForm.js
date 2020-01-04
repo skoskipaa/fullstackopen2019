@@ -26,7 +26,7 @@ const CommentForm = (props) => {
           <Form.Group>
             <Form.Input>
               <label style={{ marginRight: '15px' }}>Comment</label>
-              <input {...comment.noReset}></input>
+              <input id="comment" {...comment.noReset}></input>
             </Form.Input>
             <Form.Button primary type="submit">Add comment</Form.Button>
           </Form.Group>
