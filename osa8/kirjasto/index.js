@@ -162,8 +162,10 @@ const resolvers = {
 
   Mutation: {
       addBook: (root, args) => {
-    
-        if (!authors.includes(args.author)) {
+          
+        const auth = authors.find(a => a.name === args.author)
+        if (!auth) {
+          console.log('UUSI KIRJAILIJE')
               
             const author = {
                 name: args.author,
