@@ -2,9 +2,22 @@ import React from 'react'
 import EditYear from './EditYear'
 import { gql } from 'apollo-boost'
 import { Mutation } from 'react-apollo'
+//import { useApolloClient } from '@apollo/react-hooks'
 
+const EDIT_AUTHOR = gql`
+  mutation editAuthor($name: String!, $born: Int!) {
+      editAuthor(name: $name, setBornTo: $born) {
+          name
+          born
+          bookCount
+          id
+      }
+  }
+  `
 
 const Authors = (props) => {
+
+  //const client = useApolloClient(EDIT_AUTHOR)
 
   if (!props.show) {
     return null
@@ -15,17 +28,6 @@ const Authors = (props) => {
   }
   
   const authors = props.result.data.allAuthors
-
-  const EDIT_AUTHOR = gql`
-  mutation editAuthor($name: String!, $born: Int!) {
-      editAuthor(name: $name, setBornTo: $born) {
-          name
-          born
-          bookCount
-          id
-      }
-  }
-  `
 
   return (
     <div>

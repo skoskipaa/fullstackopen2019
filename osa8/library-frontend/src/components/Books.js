@@ -1,6 +1,9 @@
 import React from 'react'
+//import { useApolloClient } from '@apollo/react-hooks'
+//import { gql } from 'apollo-boost'
 
 const Books = (props) => {
+
   if (!props.show) {
     return null
   }
@@ -8,6 +11,7 @@ const Books = (props) => {
   if (props.result.loading) {
     return <div>loading...</div>
   }
+
 
   const books = props.result.data.allBooks
 

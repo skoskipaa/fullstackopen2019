@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
-import { Query, Mutation } from 'react-apollo'
 import { gql } from 'apollo-boost'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 
 const ALL_AUTHORS = gql`
     {
@@ -44,13 +44,20 @@ const App = () => {
   const [errorMsg, setErrorMsg] = useState(null)
 
   const handleError = (error) => {
-    console.log('ERR', error.graphQLErrors)
+    console.log('ERROR', error.graphQLErrors)
     setErrorMsg(error.graphQLErrors[0].message)
 
     setTimeout(() => {
       setErrorMsg(null)
     }, 5000)
   }
+
+  const books = useQuery(ALL_BOOKS)
+  const authors = useQuery(ALL_AUTHORS)
+  const [addBook] = useMutation(CREATE_BOOK, {
+    onError: handleError, refetchQueries: [{ query: ALL_AUTHORS }, 
+      { query: ALL_BOOKS }]
+  })
 
   return (
     <div>
@@ -66,21 +73,10 @@ const App = () => {
         <button onClick={() => setPage('add')}>add book</button>
       </div>
     
-    <Query query={ALL_AUTHORS}>
-     {(result) => <Authors show={page === 'authors'} result={result}
-                  ALL_AUTHORS={ALL_AUTHORS} ALL_BOOKS={ALL_BOOKS}/>}
-    </Query>
-
-    <Query query={ALL_BOOKS}>
-      {(result) => <Books show={page === 'books'} result={result} />}
-    </Query>
-
-    <Mutation mutation={CREATE_BOOK} onError={handleError}
-        refetchQueries={[{ query: ALL_BOOKS }, { query: ALL_AUTHORS }]}
-      >
-      {(addBook) => <NewBook show={page === 'add'} addBook={addBook} />}
-    </Mutation>
-
+    <Authors show={page === 'authors'} result={authors}
+            ALL_AUTHORS={ALL_AUTHORS} ALL_BOOKS={ALL_BOOKS}/>
+    <Books show={page === 'books'} result={books} />
+    <NewBook show={page === 'add'} addBook={addBook} />
     </div>
   )
 }
