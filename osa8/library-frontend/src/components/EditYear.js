@@ -41,10 +41,3 @@ const EditYear = (props) => {
 }
 
 export default EditYear
-
-/*
-name
-                    <input 
-                    value={name} 
-                    onChange={({ target }) => setName(target.value)} />
-*/
